@@ -1,0 +1,20 @@
+[project]
+name = "math-overlay-sdk"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.140.0",
+    "google-genai>=2.14.0",
+    "jupyterlab>=4.6.2",
+    "numpy>=2.5.1",
+    "pillow>=12.3.0",
+    "plotly>=6.9.0",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.32",
+    "supabase>=2.31.0",
+    "sympy>=1.14.0",
+    "uuid>=1.30",
+    "uvicorn>=0.51.0",
+]

@@ -1,0 +1,242 @@
+.widget-container {
+  position: fixed;
+
+  top: 200px;
+  right: 20px;
+
+  z-index: 999;
+
+  width: 52px;
+  height: auto;
+
+  background: #ffffff;
+
+  border: 1px solid #dddddd;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+  transition:
+    width 0.25s ease,
+    height 0.25s ease;
+
+  overflow: visible;
+
+  padding: 6px;
+
+  box-sizing: border-box;
+}
+
+
+/* ----------------------------- */
+/* Hover expanded state           */
+/* ----------------------------- */
+
+.widget-expanded {
+  width: 160px;
+}
+
+
+/* ----------------------------- */
+/* Full expanded state            */
+/* ----------------------------- */
+
+.widget-full {
+  width: 500px;
+  height: 600px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  padding: 0;
+}
+
+
+/* ----------------------------- */
+/* Feature container              */
+/* ----------------------------- */
+
+.widget-features {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+}
+
+
+/* ----------------------------- */
+/* Feature button                 */
+/* ----------------------------- */
+
+.widget-item {
+  position: relative;
+
+  width: 100%;
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 8px;
+
+  cursor: pointer;
+
+  background: transparent;
+  border: none;
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+.widget-item:hover {
+  background: #f5f5f5;
+}
+
+.widget-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+/* ----------------------------- */
+/* Lucide icons                  */
+/* ----------------------------- */
+
+.widget-icon {
+  width: 22px !important;
+  height: 22px !important;
+
+  min-width: 22px;
+  min-height: 22px;
+
+  flex-shrink: 0;
+}
+
+
+/* ----------------------------- */
+/* Button label                  */
+/* ----------------------------- */
+
+.widget-label {
+  white-space: nowrap;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #111111;
+}
+
+
+/* ----------------------------- */
+/* Tooltip                       */
+/* ----------------------------- */
+
+.tooltip {
+  position: absolute;
+
+  z-index: 1000;
+
+  left: -210px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background: #222222;
+  color: white;
+
+  padding: 8px 10px;
+
+  border-radius: 6px;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 0.2s ease;
+}
+
+.widget-item:hover .tooltip {
+  opacity: 1;
+}
+
+
+/* ----------------------------- */
+/* Full widget header             */
+/* ----------------------------- */
+
+.widget-header {
+  height: 50px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 14px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  color: #111111;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+/* ----------------------------- */
+/* Close button                   */
+/* ----------------------------- */
+
+.widget-close {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  color: #555555;
+}
+
+.widget-close:hover {
+  background: #f1f1f1;
+  color: #111111;
+}
+
+
+/* ----------------------------- */
+/* Full content                   */
+/* ----------------------------- */
+
+.widget-content {
+  flex: 1;
+
+  min-height: 0;
+
+  width: 100%;
+
+  overflow: hidden;
+}

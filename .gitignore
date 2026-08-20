@@ -1,0 +1,24 @@
+
+.env
+.env.*
+
+node_modules/
+npm-debug.log*
+
+
+# Frontend build
+frontend/dist/
+frontend/.vite/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+.venv/
+venv/
+env/
+
+build/
+dist/
+
+.vscode/
