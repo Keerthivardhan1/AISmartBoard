@@ -1,6 +1,7 @@
 import time
 import uuid
 import json
+import logging
 
 from fastapi import (
     APIRouter,
@@ -17,6 +18,7 @@ from utils.dbUtils.storage import upload_image
 from utils.dbUtils.db import insert_request_metadata
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.post("/equation")
@@ -35,15 +37,17 @@ async def generate_graph(
                 detail="Image is required."
             )
 
-        print(f"Received request from user: {x_user_id}")
-        print(image.filename)
-        print(image.content_type)
+        logger.info(f"Received request from user: {x_user_id}")
+        logger.info(image.filename)
+        logger.info(image.content_type)
 
         image_bytes = await image.read()
 
         session_id = request.cookies.get("session_id")
+        logger.info(f"Session ID from cookie: {session_id}")
 
         if session_id is None:
+            logger.info("No session_id cookie found. Generating a new session_id.")
             session_id = str(uuid.uuid4())
 
             response.set_cookie(
@@ -55,7 +59,7 @@ async def generate_graph(
                 secure=False,
             )
 
-        print(
+        logger.info(
             f"""
             User ID    : {x_user_id}
             Session ID : {session_id}
@@ -93,6 +97,8 @@ async def generate_graph(
 
     except Exception as e:
         latency_ms = int((time.perf_counter() - start_time) * 1000)
+
+        logger.error(f"Error processing request for user {x_user_id}: {e}")
 
         insert_request_metadata(
             session_id=session_id if "session_id" in locals() else None,

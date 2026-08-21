@@ -30,8 +30,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "https://ai-smart-board.vercel.app"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 @app.get("/")
@@ -72,20 +73,27 @@ async def start_user(
             value=session_id,
             httponly=True,
             max_age=SESSION_TIMEOUT_SECONDS,
-            samesite="lax",
-            secure=False,  # set to True in production with HTTPS
+            samesite="none",
+            secure=True,  # set to True in production with HTTPS
         )
     print(f"{x_user_id}:{session_id}")
-    insert_user_session(
-        user_id=x_user_id,
-        session_id=session_id,
-    )
+    try:
+        insert_user_session(
+            user_id=x_user_id,
+            session_id=session_id,
+        )
 
-    return {
-        "message": "Session started",
-        "user_id": x_user_id,
-        "session_id": session_id,
-    }
+        return {
+            "message": "Session started",
+            "user_id": x_user_id,
+            "session_id": session_id,
+        }
+    except Exception as e:
+        logger.error(f"Error inserting session for user {x_user_id}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Internal server error while starting session."
+        )
 
 
 app.include_router(router)
