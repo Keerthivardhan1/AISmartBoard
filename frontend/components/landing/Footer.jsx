@@ -16,15 +16,28 @@ function Footer() {
               An interactive learning workspace for turning mathematical
               expressions into interactive graphs.
             </p>
+            <p>Todo: Integrating AI Chat, Speech Recognition</p>
+            <p>This is a prototype for an interactive learning workspace. 
+              If you are teacher/mentor and would like to use it for your educational purposes, please contact me.</p>
+
+            <p>Currently this prototype can handle </p>
+            <ul>
+              
+              <li>5 generate equation requests per minute.</li>
+              <li>20 such requests per day.</li>
+
+            </ul>
 
             <div className="footer-tech">
               <span className="footer-label">Built with</span>
 
               <span>Excalidraw</span>
               <span className="tech-plus">+</span>
-              <span>Gemini</span>
+              <span>Gemini 2.5 Flash</span>
               <span className="tech-plus">+</span>
               <span>Desmos</span>
+              <span className="tech-plus">+</span>
+              <span>Framer Motion</span>
             </div>
           </div>
 
@@ -44,7 +57,7 @@ function Footer() {
               </a>
 
               <a
-                href="#"
+                href="https://github.com/Keerthivardhan1/AISmartBoard/tree/dev"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -52,9 +65,9 @@ function Footer() {
                 <span>GitFork</span>
               </a>
 
-              <a href="mailto:your@email.com">
+              <a href="mailto:keerthivardhantekulapelli@gmail.com">
                 <Mail size={18} />
-                <span>Email</span>
+                <span>Email: keerthivardhantekulapelli@gmail.com</span>
               </a>
 
             </div>

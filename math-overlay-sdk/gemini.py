@@ -25,3 +25,19 @@ def invoke_gemini(image_bytes: bytes):
     )
 
     return json.loads(response.text)
+
+def invoke_gemini_with_text(text: str, prompt_name: str):
+    prompt = load_prompt(prompt_name)
+
+    response = client.models.generate_content(
+        # model="gemini-2.5-flash",
+        model="gemini-3.1-flash-lite",
+        contents=[
+            prompt,
+            text
+        ]
+    )
+
+    
+
+    return response.text

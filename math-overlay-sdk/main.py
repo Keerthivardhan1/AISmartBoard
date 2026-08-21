@@ -9,8 +9,18 @@ from fastapi import (
 import uuid
 
 from routers.equation import router
+from routers.AiChat import ChatRouter
 from fastapi.middleware.cors import CORSMiddleware
 from utils.dbUtils.db import insert_user_session
+
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+
+logger = logging.getLogger(__name__)
 
 SESSION_TIMEOUT_SECONDS = 30 * 60 #30mins
 
@@ -18,12 +28,15 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://ai-smart-board.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 
 @app.post("/start-session")
 async def start_user(
@@ -76,3 +89,4 @@ async def start_user(
 
 
 app.include_router(router)
+app.include_router(ChatRouter)

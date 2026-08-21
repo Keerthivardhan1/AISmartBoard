@@ -15,50 +15,63 @@ function Chat() {
       behavior: "smooth",
     });
   }, [messages, loading]);
+const handleSendQuery = async () => {
+  if (!inputValue.trim() || loading) return;
 
-  const handleSendQuery = async () => {
-    if (!inputValue.trim() || loading) return;
+  const query = inputValue;
 
-    const query = inputValue;
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "user",
+      text: query,
+    },
+  ]);
+
+  setInputValue("");
+  setLoading(true);
+
+  try {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+    const response = await fetch(`${BACKEND_URL}/ask`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        question: query,
+      }),
+    });
+
+    const aiResponse = await response.json();
+
+    // Force fetch to jump into catch block when backend returns 4xx or 5xx status codes
+    if (!response.ok) {
+      throw new Error(aiResponse.detail || `Server error: ${response.status}`);
+    }
+
+    console.log("AI Response:", aiResponse);
 
     setMessages((prev) => [
       ...prev,
       {
-        role: "user",
-        text: query,
+        role: "ai",
+        text: aiResponse.answer,
       },
     ]);
-
-    setInputValue("");
-    setLoading(true);
-
-    try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
-      const response = await fetch(`${BACKEND_URL}/ask`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query,
-        }),
-      });
-
-      const aiResponse = await response.json();
-
-      setMessages((prev) => [...prev, aiResponse]);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "error",
-          text: error.message || "Failed to connect to server.",
-        },
-      ]);
-    }
-
+  } catch (error) {
+    console.error("Chat Error:", error);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "error",
+        text: error.message || "Failed to connect to server.",
+      },
+    ]);
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   return (
     <div className="chat-container">

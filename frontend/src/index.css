@@ -153,11 +153,13 @@ body::before {
   position: fixed;
   inset: 0;
 
-  background-image: url("/noise.jpeg");
-  background-repeat: repeat;
-  background-size: 220px;
+  background: url("/noise.jpeg") center center / cover no-repeat;
 
-  opacity: 0.05;
+  /* background-image: url("/noise.jpeg");
+  background-repeat: repeat;
+  background-size: 220px; */
+
+  opacity: 0.2;
 
   pointer-events: none;
   z-index: 9999;
@@ -174,7 +176,7 @@ body::after{
         radial-gradient(
             circle at top right,
             rgba(34,197,94,.08),
-            transparent 40%
+            transparent 80%
         );
 
     pointer-events:none;
@@ -323,48 +325,85 @@ body::after{
 
     z-index:-1;
 }
-
 .hook-section {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 0 8vw;
-    position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  position: relative;
+  overflow: hidden; /* Prevents unwanted horizontal scroll from motion effects */
 }
 
-.hook-section::after{
+.hook-section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(transparent, #f5f5f2);
+  pointer-events: none;
+}
 
-    content:"";
+/* Flex layout: Stacks on mobile, splits into 2 columns on desktop */
+.hook-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 1;
+}
 
-    position:absolute;
-
-    bottom:0;
-    left:0;
-
-    width:100%;
-    height:220px;
-
-    background:linear-gradient(
-        transparent,
-        #f5f5f2
-    );
+@media (min-width: 768px) {
+  .hook-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 4rem;
+  }
 }
 
 .hook-content {
-    max-width: 1200px;
+  flex: 1;
+  max-width: 100%;
 }
 
 .hook-eyebrow {
-    margin-bottom: 30px;
-    font-size: 14px;
-    letter-spacing: 0.12em;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
 }
 
+/* Fluid typography scaling smoothly across device screens */
 .hook-title {
-    margin: 0;
-    font-size: clamp(4rem, 9vw, 10rem);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
+  margin: 0;
+  font-size: clamp(2.75rem, 8vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.question-note {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+/* Responsive Image Styles replacing fixed vh/vw values */
+.hook-image-wrapper {
+  width: 100%;
+  max-width: 450px;
+  flex-shrink: 0;
+}
+
+.hook-image {
+  width: 100%;
+  height: auto;
+  max-height: 50vh;
+  object-fit: cover;
+  border-radius: 20px;
 }
 .spark-section {
     min-height: 150vh;
@@ -663,7 +702,8 @@ body::after{
   font-weight: 600;
 }
 
-.footer-project p {
+.footer-project p,
+.footer-project li {
   margin: 0;
   color: rgba(255, 255, 255, 0.55);
   font-size: 14px;
