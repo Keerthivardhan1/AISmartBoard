@@ -2,7 +2,7 @@
 
 Turn handwritten mathematical equations into interactive graphs instantly.
 
-**Live Demo:** https://ai-smart-board.vercel.app/smartboard
+**Live Demo:** https://ai-smart-board.vercel.app
 
 ---
 
