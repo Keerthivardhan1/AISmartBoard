@@ -76,7 +76,7 @@ async def start_user(
             samesite="none",
             secure=True,  # set to True in production with HTTPS
         )
-    print(f"{x_user_id}:{session_id}")
+    logger.info(f"{x_user_id}:{session_id}")
     try:
         insert_user_session(
             user_id=x_user_id,

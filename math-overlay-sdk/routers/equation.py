@@ -15,7 +15,8 @@ from fastapi import (
 
 from gemini import invoke_gemini
 from utils.dbUtils.storage import upload_image
-from utils.dbUtils.db import insert_request_metadata
+from utils.dbUtils.db import insert_request_metadata, getAllEquations
+from google.genai.errors import ServerError
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -92,6 +93,23 @@ async def generate_graph(
 
         return res
 
+    except ServerError as e:
+        # Gracefully handles 503 Overloaded or 500 Google side errors
+        logger.warning(f"Gemini service unavailable: {e}")
+        insert_request_metadata(
+            session_id=session_id if "session_id" in locals() else None,
+            endpoint="/equation",
+            image_url=None,
+            request_body={},
+            response_body={"error": str(e)},
+            status_code=500,
+            latency_ms=latency_ms,
+        )
+        raise HTTPException(
+            status_code=503,
+            detail="The AI model is currently experiencing high demand. Please try again shortly."
+        )
+
     except HTTPException:
         raise
 
@@ -114,3 +132,26 @@ async def generate_graph(
             status_code=500,
             detail="Internal Server Error",
         )
+    
+@router.get("/equations")
+async def getEquations(x_user_id: str | None = Header(default=None),):
+    """
+    Docstring for getEquations
+    
+    :param userid: 
+
+    returns all the equations created/generated userid
+    """
+
+    try:
+        equations = getAllEquations(x_user_id)
+        return equations
+    except Exception as e :
+        logger.exception(f"Error fetching equations for user_id {x_user_id} : {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Unable to fetch equations : {e.message}"
+        )
+    
+
+

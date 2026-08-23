@@ -11,7 +11,8 @@ export default function GraphWidget({
   height = 350,
 }) {
   const calculatorRef = useRef(null);
-    
+  console.log("expression , " , exper);
+  
 
   useEffect(() => {
     if (!calculatorRef.current) return;

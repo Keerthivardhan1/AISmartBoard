@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { ChartLine, Bot, X } from "lucide-react";
+import { ChartLine, Bot, X, SquareFunction } from "lucide-react";
 import "./Widget.css";
 import Chat from "./Chat";
+import AllEquations from "../Graph/AllEquations";
 
 export default function Widget({
   isGenerating,
@@ -10,6 +11,7 @@ export default function Widget({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [fullExpand, setFullExpand] = useState(false);
+  const [activeTab, setActiveTab] = useState(2)
 
   const [graphText, setGraphText] = useState("Generate Graph");
 
@@ -23,6 +25,7 @@ export default function Widget({
     );
   }, [isGenerating, toggleGenerateGraph]);
 
+
   const features = [
     {
       name: "Graph",
@@ -30,6 +33,7 @@ export default function Widget({
       icon: <ChartLine className="widget-icon" />,
       onClick: handleGenerateGraph,
       label: graphText,
+      component:<p>...</p>
     },
     {
       name: "AI",
@@ -37,11 +41,22 @@ export default function Widget({
       icon: <Bot className="widget-icon" />,
       onClick: () => {},
       label: "AI",
+      component:<Chat/>
     },
+    {
+      name:"Equatioins",
+      description:"Show all equations",
+      icon: <SquareFunction className="widget-icon"  />,
+      onClick:()=>{},
+      label:'Show equations',
+      component: <span className="no-equ" >This feature is under development</span>
+      
+    }
   ];
 
-  const handleFeatureClick = (item) => {
+  const handleFeatureClick = (item, ind) => {
     setFullExpand(true);
+    setActiveTab(ind)
     item.onClick();
   };
 
@@ -77,15 +92,19 @@ export default function Widget({
       )}
 
       {!fullExpand && (
-        <div className="widget-features">
-          {features.map((item) => (
+        <div className="widget-features" >
+          {features.map((item, ind) => (
             <button
               key={item.name}
               className="widget-item"
-              onClick={() => handleFeatureClick(item)}
+              onClick={() => handleFeatureClick(item, ind)}
               disabled={
                 item.name === "Graph" ? isGenerating : false
               }
+              style={{
+                border:activeTab===item.name ? '2px solid green':'',
+                borderRadius: '1rem'
+              }}
             >
               {item.icon}
 
@@ -105,7 +124,7 @@ export default function Widget({
 
       {fullExpand && (
         <div className="widget-content">
-          <Chat />
+          {features[activeTab].component}
         </div>
       )}
     </div>

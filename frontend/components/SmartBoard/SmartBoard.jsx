@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import "./SmartBoard.css";
 import GraphWidget from "../Graph/GraphWidget";
 import Widget from "../FeaturesWidget/Widget";
+import toast, {Toaster} from 'react-hot-toast'
+
 
 export default function SmartBoard() {
-
-
   const excalidrawRef = useRef(null);
-  const [userId , setUserId] = useState(undefined)
+  const [userId, setUserId] = useState(undefined);
 
   const [selectedElements, setSelectedElements] = useState([]);
   const [selectionBox, setSelectionBox] = useState(false);
@@ -36,13 +36,12 @@ export default function SmartBoard() {
     console.log("showbtn ", selectionBox);
   }, [selectionBox]);
 
-
-
-  useEffect(()=>{
-    setUserId(localStorage.getItem("userId"))
-  },[])
+  useEffect(() => {
+    setUserId(localStorage.getItem("userId"));
+  }, []);
 
   const handleGenerateGraph = async () => {
+    
     // setIsGenerating(true);
     if (toggleGenerateGraph) {
       setToggleGenerateGraph(false);
@@ -51,54 +50,58 @@ export default function SmartBoard() {
     }
     setIsGenerating(true);
     try {
-      
-    const api = excalidrawRef.current;
+      const api = excalidrawRef.current;
 
-    if (!api || selectedElements.length === 0) {
-      alert("Select an equation first.");
-      return;
-    }
+      if (!api || selectedElements.length === 0) {
+        alert("Select an equation first.");
+        return;
+      }
 
-    const blob = await exportToBlob({
-      elements: selectedElements,
-      appState: {
-        ...api.getAppState(),
-        exportBackground: false,
-      },
-      files: api.getFiles(),
-      mimeType: "image/png",
-    });
+      const blob = await exportToBlob({
+        elements: selectedElements,
+        appState: {
+          ...api.getAppState(),
+          exportBackground: false,
+        },
+        files: api.getFiles(),
+        mimeType: "image/png",
+      });
 
-    console.log(blob);
+      console.log(blob);
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append("image", blob, "equation.png");
+      formData.append("image", blob, "equation.png");
 
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+      const BACKEND_URL =
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 
-    const response = await fetch(`${BACKEND_URL}/equation`, {
-      headers:{
-        "X-User-Id": userId,
-      },
-      credentials: "include",
-      method: "POST",
-      body: formData,
-    });
+      const response = await fetch(`${BACKEND_URL}/equation`, {
+        headers: {
+          "X-User-Id": userId,
+        },
+        credentials: "include",
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await response.json();
-    console.log("api response for graph generation : ", data);
+      if (!response.ok) {
+        throw new Error(response.detail || `Server error: ${response.status}`);
+      }
 
-    setEquation(data.latex);
+      const data = await response.json();
+      console.log("api response for graph generation : ", data);
 
-    const url = URL.createObjectURL(blob);
-    // window.open(url);
-    setToggleGenerateGraph(true);
+      setEquation(data.latex);
+
+      const url = URL.createObjectURL(blob);
+      // window.open(url);
+      setToggleGenerateGraph(true);
     } catch (error) {
-      console.log(error)
-    }finally{
+      console.error("Generate Graph handler error:", error);
+      toast.error(error.message)
 
-      
+    } finally {
       setIsGenerating(false);
     }
   };
@@ -163,6 +166,7 @@ export default function SmartBoard() {
   };
   return (
     <div className="smart-board">
+      <div><Toaster/></div>
       <Excalidraw
         // theme="dark"
         excalidrawAPI={(api) => {
@@ -218,9 +222,12 @@ export default function SmartBoard() {
       )}
 
       <div>
-        <Widget isGenerating={isGenerating} toggleGenerateGraph={toggleGenerateGraph} handleGenerateGraph={handleGenerateGraph} />
+        <Widget
+          isGenerating={isGenerating}
+          toggleGenerateGraph={toggleGenerateGraph}
+          handleGenerateGraph={handleGenerateGraph}
+        />
       </div>
-
     </div>
   );
 }

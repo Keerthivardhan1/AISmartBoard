@@ -827,3 +827,24 @@ body::after{
   border-radius: 0.5rem;
   cursor: pointer;
 }
+
+.btn-s{
+  padding: 2px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+}
+
+.btn-s:hover{
+  color: #16a34a;
+}
+
+/* ==== all equations == */
+
+.no-equ{
+  margin: 0;
+  color: gray;
+  font-size: 14px;
+  line-height: 1.7;
+}
